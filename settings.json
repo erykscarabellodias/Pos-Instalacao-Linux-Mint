@@ -1,0 +1,22 @@
+{
+    "workbench.colorTheme": "Dracula",
+    "workbench.iconTheme": "vscode-great-icons",
+    "vsicons.dontShowNewVersionMessage": true,
+    
+    "terminal.integrated.automationShell.linux": "/bin/zsh",
+    "terminal.integrated.fontFamily": "MesloLGS Nerd Font Mono",
+    "terminal.integrated.shellArgs.osx": ["-0"],
+    "terminal.integrated.cursorStyle": "underline",
+    "editor.wordWrap": "on",
+    "window.zoomLevel": 0,
+
+    "powermode.enabled": true,
+    "powermode.presets": "flames", 
+    "powermode.enableShake": false,
+    "powermode.explosionSize": 4,
+
+    "php.executablePath": "/opt/lampp/bin/php-7.3.9",
+    "php.validate.executablePath": "/opt/lampp/bin/php-7.3.9",
+    "php.suggest.basic": false,
+    "liveServer.settings.donotShowInfoMsg": true
+}
