@@ -7,17 +7,19 @@ ProgramasViaRepositorio=(
     whatsapp-desktop
     qbittorrent
     plank
-    snapd
     gitg
     zsh
+    dropbox
 )
-
+    
 Snaps=(
-    inkscape
+	inkscape
     spotify
-    pycharm-community --classic
-    eclipse --classic
+    pycharm-community
+    eclipse
+    code
 )
+# Obs: precisam do --classic: pycharm, eclipse, code
 
 ExtensoesVSCode=(
     abusaidm.html-snippets
@@ -42,11 +44,8 @@ PontoIcons="$HOME/.icons"
 
 # .deb
 Chrome="https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
-VSCode="https://go.microsoft.com/fwlink/?LinkID=760868"
-Dropbox="https://linux.dropbox.com/packages/ubuntu/dropbox_2019.02.14_amd64.deb"
 
 # .run
-VirtualBox="https://download.oracle.com/virtualbox/6.0.14/VirtualBox-6.0.14-133895-Linux_amd64.run"
 Xampp="https://sourceforge.net/projects/xampp/files/XAMPP%20Linux/7.4.1/xampp-linux-x64-7.4.1-0-installer.run"
 
 # curl
@@ -67,41 +66,30 @@ echo "============================= CRIANDO DIRETÓRIOS NECESSÁRIOS ===========
 mkdir "$Instalacoes"; mkdir "$Debs" ; mkdir "$Outros"; mkdir "$Personalizacoes"
 
 # Instalação dos .deb
-echo "============================= BAIXANDO E INSTALANDO PACOTES .DEB ============================="
+echo "============================= BAIXANDO E INSTALANDO PACOTES .DEB =============================" 
 wget -c "$Chrome"   -P "$Debs"
-wget -c "$VSCode"   -P "$Debs"
-wget -c "$Dropbox"  -P "$Debs"
-
 sudo dpkg -i $Debs/*.deb
 
 # Instalando os apt
-echo "============================= INSTALANDO PROGRAMAS VIA APT ============================="
+echo "============================= INSTALANDO PROGRAMAS VIA APT =============================" 
 for programa in ${ProgramasViaRepositorio[@]}; do
     if ! dpkg -l | grep -q $programa; then
-        apt install "$programa" -y
+        sudo apt install "$programa" -y
     else
         echo "$programa já estava instalado"
     fi
 done
-
+	
 # Instalando os snaps
 echo "============================= INSTALANDO PROGRAMAS VIA SNAP ============================="
+sudo apt install snapd
 for snap in ${Snaps[@]}; do
-    sudo snap install "$snap"
+	if [ "$snap" == "pycharm-community" -o "$snap" == "eclipse" -o "$snap" == "code" ]; then
+    	sudo snap install "$snap" --classic
+	else
+		sudo snap install "$snap"
+	fi
 done
-
-echo "============================= INSTALANDO PROGRAMAS OUTROS PROGRAMAS ============================="
-# Virtual Box
-wget -c "$VirtualBox" -P "$Outros"
-chmod +x "$Outros/virtualbox.run"
-cd "$Outros"
-sudo .virtualbox.run
-
-# RVM, Ruby e Rails
-gpg "$ChaveRVM"
-\curl "$RVM"
-source ~/.rvm/scripts/rvm
-rvm install 2.6.3
 
 # Xampp
 wget -c "$Xampp" -O "$Outros/xampp.run"
@@ -109,33 +97,32 @@ chmod +x "$Outros/xampp.run"
 
 # Instalação de personalizações
 echo "============================= BAIXANDO TEMAS E PERSONALIZAÇÕES ============================="
-wget "$TemaFlatRemix" -O "$Personalizacoes/TemaFlatRemix.zip" ; unzip "$Personalizacoes/emaFlatRemix.zip" -d "$Personalizacoes"
-wget "$TemaQogir" -O "$Personalizacoes/TemaQogir.zip" ; unzip "$Personalizacoes/emaQogir.zip" -d "$Personalizacoes"
-wget "$IconesFlatRemix" -O "$Personalizacoes/IconesFlatRemix.zip" ; unzip "$Personalizacoes/conesFlatRemix.zip" -d "$Personalizacoes"
-wget "$CursorCapitaine" -O "$Personalizacoes/CursorCapitaine.zip" ; unzip "$Personalizacoes/ursorCapitaine.zip" -d "$Personalizacoes"
+wget "$TemaFlatRemix" -O "$Personalizacoes/TemaFlatRemix.zip" ; unzip "$Personalizacoes/TemaFlatRemix.zip" -d "$Personalizacoes"
+wget "$TemaQogir" -O "$Personalizacoes/TemaQogir.zip" ; unzip "$Personalizacoes/TemaQogir.zip" -d "$Personalizacoes"
+wget "$IconesFlatRemix" -O "$Personalizacoes/IconesFlatRemix.zip" ; unzip "$Personalizacoes/IconesFlatRemix.zip" -d "$Personalizacoes"
+wget "$CursorCapitaine" -O "$Personalizacoes/CursorCapitaine.zip" ; unzip "$Personalizacoes/CursorCapitaine.zip" -d "$Personalizacoes"
 
-cp -pr "$Personalizacoes/flat-remix-gtk-master/Flat-Remix-GTK-Blue-Dark/" "$PontoThemes/lat-Remix-GTK-Blue-Dark"
+cp -pr "$Personalizacoes/flat-remix-gtk-master/Flat-Remix-GTK-Blue-Dark/" "$PontoThemes/Flat-Remix-GTK-Blue-Dark"
 cp -pr "$Personalizacoes/Qogir-theme-master/src" "$PontoThemes/Qogir-theme"
 cp -pr "$Personalizacoes/capitaine-cursors-master/dist/" "$PontoIcons/capitaine-cursors"
 cp -pr "$Personalizacoes/flat-remix-master/Flat-Remix-Blue" "$PontoIcons/flat-remix-icons"
 
-# Instalando extensões no VSCode
+# Instalando extensões no VSCode 
 for extensao in ${ExtensoesVSCode[@]}; do
     sudo code --user-data-dir="$HOME/.config/Code" --install-extension "$extensao"
 done
 
-# Definindo ZSH como shell padrão e instalando Oh My Zsh
-sudo chsh -s $(which zsh)
-sh -c " $ ( wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh ) "
-
-# Copiando settings.json do VSCode
+# Copiando settings.json do VSCode 
 rm "$HOME/.config/Code/User/settings.json"
 cp "$HOME/Downloads/Pos-Instalacao-Linux-Mint/settings.json" "$HOME/.config/Code/User"
 
 # Atualizações
-echo "============================= ATUALIZANDO SISTEMA ============================="
+#echo "============================= ATUALIZANDO SISTEMA =============================" 
 sudo apt update -y ; sudo apt upgrade
 
 echo "============================= CONSIDERAÇÕES FINAIS ============================="
 echo "- Instalar Xampp com ./"
+echo "- Instalar o RVM"
+echo "- Configurar Oh My Zsh"
 echo "- Configurar temas instalados"
+echo "- Reiniciar a sessão"
