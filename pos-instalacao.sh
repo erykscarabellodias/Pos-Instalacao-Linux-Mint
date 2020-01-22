@@ -102,10 +102,10 @@ wget "$TemaQogir" -O "$Personalizacoes/TemaQogir.zip" ; unzip "$Personalizacoes/
 wget "$IconesFlatRemix" -O "$Personalizacoes/IconesFlatRemix.zip" ; unzip "$Personalizacoes/IconesFlatRemix.zip" -d "$Personalizacoes"
 wget "$CursorCapitaine" -O "$Personalizacoes/CursorCapitaine.zip" ; unzip "$Personalizacoes/CursorCapitaine.zip" -d "$Personalizacoes"
 
-cp -pr "$Personalizacoes/flat-remix-gtk-master/Flat-Remix-GTK-Blue-Dark/" "$PontoThemes/Flat-Remix-GTK-Blue-Dark"
-cp -pr "$Personalizacoes/Qogir-theme-master/src" "$PontoThemes/Qogir-theme"
-cp -pr "$Personalizacoes/capitaine-cursors-master/dist/" "$PontoIcons/capitaine-cursors"
-cp -pr "$Personalizacoes/flat-remix-master/Flat-Remix-Blue" "$PontoIcons/flat-remix-icons"
+cp -p -r "$Personalizacoes/flat-remix-gtk-master/Flat-Remix-GTK-Blue-Dark/" "$PontoThemes/Flat-Remix-GTK-Blue-Dark"
+cd /home/testemint/Downloads/Instalacoes/Personalizacoes/Qogir-theme-master/ && sudo ./install.sh
+cp -p -r "$Personalizacoes/capitaine-cursors-master/dist/" "$PontoIcons/capitaine-cursors"
+cp -p -r "$Personalizacoes/flat-remix-master/Flat-Remix-Blue" "$PontoIcons/flat-remix-icons"
 
 # Instalando extensões no VSCode 
 for extensao in ${ExtensoesVSCode[@]}; do
